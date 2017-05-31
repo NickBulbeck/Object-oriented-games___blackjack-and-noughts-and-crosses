@@ -36,12 +36,10 @@ public class Game {
         }
         boolean stillHooked = true;
         do {
-            System.out.println("You have " + playerWins + " wins; Dealer has " + dealerWins);
-            System.out.println("Play again? (y/n)");
-            String input = sc.next().toLowerCase();
+            String input = getPlayOnDecision();
             int deckSize = this.deck.countRemainingCards();
             if (deckSize < 10) {
-                System.out.println("Sorry - only " + deckSize + " cards left. Hometime!");
+                System.out.println("Sorry - only " + deckSize + " cards left. Gamble responsibly. Hometime!");
                 stillHooked = false;
             } else if (input.equals("y")) {
                 setUpNextRound();
@@ -136,12 +134,9 @@ public class Game {
     private void stickOrTwist() {
         boolean twisting = true;
         do {
-            System.out.println("Your hand is: " + player.showHand());
-            System.out.println("Twist? (y/n)");
-            String input = sc.next().toLowerCase();
+            String input = getTwistDecision();
             if (input.equals("y")) {
-                player.takeCard(this.deck);
-                dealer.playTurn(this.deck);
+                twist();
                 if (player.showScore() < 0) {
                     System.out.println("*** BAD LUCK - YOU'VE BUST !! ***");
                     closeGame();
@@ -155,6 +150,24 @@ public class Game {
         return;
     }
 
+    private String getTwistDecision() {
+        System.out.println("Your hand is: " + player.showHand());
+        System.out.println("Twist? (y/n)");
+        String decision = sc.next().toLowerCase();
+        return decision;
+    }
+    private String getPlayOnDecision() {
+        System.out.println("You have " + playerWins + " wins; Dealer has " + dealerWins);
+        System.out.println("Play again? (y/n)");
+        String decision = sc.next().toLowerCase();
+        return decision;
+    }
+
+    private void twist() {
+        player.takeCard(this.deck);
+        dealer.playTurn(this.deck);
+    }
+
 //    getters used for testing the game
     public int getDeckSize() {
         return deck.countRemainingCards();
@@ -162,5 +175,4 @@ public class Game {
     public int getPlayerNumbers() {
         return players.size();
     }
-
 }
